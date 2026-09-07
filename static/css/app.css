@@ -162,11 +162,6 @@ body {
   font-weight: 700;
 }
 
-.startup-splash-text {
-  margin: 0;
-  color: #666;
-}
-
 .startup-splash-progress {
   width: 180px;
 }
