@@ -68,6 +68,21 @@ let timelineCursor = null;
 let timelineHasMore = false;
 let notificationsLoading = false;
 let selectedImages = [];
+let menuRepositionFrame = null;
+
+function repositionOpenMenus() {
+  menuRepositionFrame = null;
+  document.querySelectorAll('#menu-overlay-container md-menu').forEach((menu) => {
+    if (menu.open) menu.reposition();
+  });
+}
+
+function queueMenuReposition() {
+  if (menuRepositionFrame !== null) return;
+  menuRepositionFrame = window.requestAnimationFrame(repositionOpenMenus);
+}
+
+window.addEventListener('resize', queueMenuReposition, { passive: true });
 
 // エラーメッセージ表示関数（i18n 対応）
 function showError(messageKey, params = {}) {
@@ -870,7 +885,7 @@ async function loadTimeline(force = false, append = false) {
       repostMenu.anchorElement = repostBtn; // MWCに直接ボタンの要素を教える！
       repostMenu.menuCorner = 'start-start';
       repostMenu.anchorCorner = 'end-start'; // ボタンの左下にメニューを出す設定
-      repostMenu.positioning = 'fixed'; // これが超重要！親の制約を無視して画面基準で配置してくれるよ
+      repostMenu.positioning = 'document';
 
       const doRepostItem = document.createElement('md-menu-item');
       doRepostItem.dataset.action = 'repost';
